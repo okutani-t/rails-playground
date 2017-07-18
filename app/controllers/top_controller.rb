@@ -1,17 +1,15 @@
 class TopController < ApplicationController
+  TOKYO_CODE = '130010'.freeze
+  ISHIKAWA_CODE = '170010'.freeze
+  OKINAWA_CODE = '471010'.freeze
   def index
-    tokyo_code = '130010'
-    uri = URI.parse("http://weather.livedoor.com/forecast/webservice/json/v1?city=#{tokyo_code}")
+    uri = URI.parse("http://weather.livedoor.com/forecast/webservice/json/v1?city=#{TOKYO_CODE}")
     json = Net::HTTP.get(uri)
     @tokyo_result = JSON.parse(json)
-
-    ishikawa_code = '170010'
-    uri = URI.parse("http://weather.livedoor.com/forecast/webservice/json/v1?city=#{ishikawa_code}")
+    uri = URI.parse("http://weather.livedoor.com/forecast/webservice/json/v1?city=#{ISHIKAWA_CODE}")
     json = Net::HTTP.get(uri)
     @ishikawa_result = JSON.parse(json)
-
-    okinawa_code = '471010'
-    uri = URI.parse("http://weather.livedoor.com/forecast/webservice/json/v1?city=#{okinawa_code}")
+    uri = URI.parse("http://weather.livedoor.com/forecast/webservice/json/v1?city=#{OKINAWA_CODE}")
     json = Net::HTTP.get(uri)
     @okinawa_result = JSON.parse(json)
   end
