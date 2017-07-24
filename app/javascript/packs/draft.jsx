@@ -17,13 +17,20 @@ class MyEditor extends React.Component {
     }
     return 'not-handled'
   }
+  _onBoldClick() {
+    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
+  }
+
   render() {
     return (
-      <Editor
-        editorState={this.state.editorState}
-        handleKeyCommand={this.handleKeyCommand}
-        onChange={this.onChange}
-      />
+      <div className='editor'>
+        <button type='button' onClick={this._onBoldClick.bind(this)}>Bold</button>
+        <Editor
+          editorState={this.state.editorState}
+          handleKeyCommand={this.handleKeyCommand}
+          onChange={this.onChange}
+        />
+      </div>
     );
   }
 }
