@@ -18,7 +18,10 @@
 
   <div class="field">
     <%= form.label :body %>
-    <%= form.text_area :body, id: :post_body %>
+    <%= form.text_area :body, id: :post_body, style: 'display:none;' %>
+    <hr>
+    <div id="container"></div>
+    <hr>
   </div>
 
   <div class="actions">
