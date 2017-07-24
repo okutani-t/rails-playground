@@ -1,11 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Editor, EditorState, RichUtils} from 'draft-js';
+import {Editor, EditorState, convertFromHTML, ContentState, RichUtils} from 'draft-js';
 
 class MyEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {editorState: EditorState.createEmpty()};
+    const sampleMarkup =
+      '<b>Bold text</b>, <i>Italic text</i><br/ ><br />' +
+      '<a href="http://www.facebook.com">Example link</a>';
+    const blocksFromHTML = convertFromHTML(sampleMarkup);
+    const state = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+    this.state = {editorState: EditorState.createWithContent(state)};
     this.onChange = (editorState) => this.setState({editorState});
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
   }
