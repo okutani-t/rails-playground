@@ -2,17 +2,20 @@
 <html>
   <head>
     <title>RailsPlayground</title>
+    <meta charset="utf-8">
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application' %>
-    <%= javascript_pack_tag 'hello_react' %>
   </head>
 
   <body>
     <main class="main">
       <%= yield %>
     </main>
+    <p>draft.js editor</p>
+    <div id="container"></div>
+
+    <%= javascript_pack_tag 'draft' %>
   </body>
 </html>
