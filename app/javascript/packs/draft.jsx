@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Editor, EditorState, convertFromHTML, ContentState, RichUtils} from 'draft-js';
+import {stateToHTML} from 'draft-js-export-html';
 
 class MyEditor extends React.Component {
   constructor(props) {
     super(props);
-    const defaultMarkup = document.getElementById('post_body').value;
-    const blocksFromHTML = convertFromHTML(defaultMarkup);
-    const state = ContentState.createFromBlockArray(
+    let defaultMarkup = document.getElementById('post_body').value;
+    let blocksFromHTML = convertFromHTML(defaultMarkup);
+    let state = ContentState.createFromBlockArray(
       blocksFromHTML.contentBlocks,
       blocksFromHTML.entityMap
     );
@@ -22,6 +23,12 @@ class MyEditor extends React.Component {
       return 'handled';
     }
     return 'not-handled'
+  }
+  handleChange(editorState) {
+    let html = stateToHTML(editorState.getCurrentContent());
+    document.getElementById('post_body').value = html;
+
+    this.setState({editorState});
   }
   _onBoldClick() {
     this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
@@ -62,7 +69,7 @@ class MyEditor extends React.Component {
         <Editor
           editorState={this.state.editorState}
           handleKeyCommand={this.handleKeyCommand}
-          onChange={this.onChange}
+          onChange={this.handleChange.bind(this)}
         />
       </div>
     );
@@ -71,5 +78,5 @@ class MyEditor extends React.Component {
 
 ReactDOM.render(
   <MyEditor />,
-  document.getElementById('container')
+  document.getElementById('draftEditor')
 );

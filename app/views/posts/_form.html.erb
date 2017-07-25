@@ -20,7 +20,7 @@
     <%= form.label :body %>
     <%= form.text_area :body, id: :post_body %>
     <hr>
-    <div id="container"></div>
+    <div id="draftEditor"></div>
     <hr>
   </div>
 
@@ -28,3 +28,5 @@
     <%= form.submit %>
   </div>
 <% end %>
+
+<%= javascript_pack_tag 'draft' %>
