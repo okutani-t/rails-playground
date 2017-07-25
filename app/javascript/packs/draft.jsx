@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import Editor from 'draft-js-plugins-editor';
 import createImagePlugin from 'draft-js-image-plugin';
-import {CompositeDecorator, ContentBlock, ContentState, EditorState, convertFromHTML, RichUtils} from 'draft-js';
+import {CompositeDecorator, ContentBlock, ContentState, EditorState, convertFromHTML, convertFromRaw, convertToRaw, RichUtils} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 
 const imagePlugin = createImagePlugin();
@@ -15,17 +15,23 @@ class MyEditor extends Component {
   constructor(props) {
     super(props);
 
-    //let defaultMarkup = document.getElementById('post_body').value;
-    let defaultMarkup =
-      '<b>Bold text</b>, <i>Italic text</i><br/ ><br />' +
-      '<a href="http://www.facebook.com">Example link</a><br /><br/ >' +
-      '<img src="https://assets-cdn.github.com/images/modules/open_graph/github-octocat.png" height="112" width="200" />';
-    let blocksFromHTML = convertFromHTML(defaultMarkup);
-    let state = ContentState.createFromBlockArray(
-      blocksFromHTML.contentBlocks,
-      blocksFromHTML.entityMap
-    );
+    //// HTMLからconvertする方法
+    // let defaultMarkup = document.getElementById('post_body').value;
+    // let blocksFromHTML = convertFromHTML(defaultMarkup);
+    // let state = ContentState.createFromBlockArray(
+    //   blocksFromHTML.contentBlocks,
+    //   blocksFromHTML.entityMap
+    // );
+    let val = document.getElementById('post_body').value;
+    let state;
+    if (val) {
+      let jsonObj = JSON.parse(val);
+      state = convertFromRaw(jsonObj);
+    } else {
+      state = ContentState.createFromText('');
+    }
     let initial = EditorState.createWithContent(state, new CompositeDecorator(decorators))
+
     this.state = {editorState: initial};
     this.onChange = (editorState) => this.setState({editorState});
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
@@ -39,8 +45,9 @@ class MyEditor extends Component {
     return 'not-handled'
   }
   handleChange(editorState) {
-    let html = stateToHTML(editorState.getCurrentContent());
-    document.getElementById('post_body').value = html;
+    let raw = convertToRaw(editorState.getCurrentContent());
+    let json = JSON.stringify(raw);
+    document.getElementById('post_body').value = json;
 
     this.setState({editorState});
   }
