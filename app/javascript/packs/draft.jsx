@@ -5,10 +5,8 @@ import {Editor, EditorState, convertFromHTML, ContentState, RichUtils} from 'dra
 class MyEditor extends React.Component {
   constructor(props) {
     super(props);
-    const sampleMarkup =
-      '<b>Bold text</b>, <i>Italic text</i><br/ ><br />' +
-      '<a href="http://www.facebook.com">Example link</a>';
-    const blocksFromHTML = convertFromHTML(sampleMarkup);
+    const defaultMarkup = document.getElementById('post_body').value;
+    const blocksFromHTML = convertFromHTML(defaultMarkup);
     const state = ContentState.createFromBlockArray(
       blocksFromHTML.contentBlocks,
       blocksFromHTML.entityMap
