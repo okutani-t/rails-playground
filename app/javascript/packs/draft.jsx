@@ -5,8 +5,6 @@ import createImagePlugin from 'draft-js-image-plugin';
 import {CompositeDecorator, ContentBlock, ContentState, EditorState, convertFromHTML, RichUtils} from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
 
-import 'draft-js-image-plugin/lib/plugin.css';
-
 const imagePlugin = createImagePlugin();
 
 const plugins = [
