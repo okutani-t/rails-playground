@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import Editor from 'draft-js-plugins-editor';
 import createImagePlugin from 'draft-js-image-plugin';
@@ -13,7 +13,7 @@ const plugins = [
   imagePlugin,
 ];
 
-class MyEditor extends React.Component {
+class MyEditor extends Component {
   constructor(props) {
     super(props);
 
