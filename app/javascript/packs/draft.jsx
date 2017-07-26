@@ -61,42 +61,47 @@ class MyEditor extends Component {
 
     this.setState({editorState});
   }
-  _onBoldClick() {
-    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
+  _onBoldClick(e) {
+    this._execOnChangeWhenBtnClick(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'), e);
   }
-  _onItalicClick() {
-    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'ITALIC'));
+  _onItalicClick(e) {
+    this._execOnChangeWhenBtnClick(RichUtils.toggleInlineStyle(this.state.editorState, 'ITALIC'), e);
   }
-  _onUnderlineClick() {
-    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'UNDERLINE'));
+  _onUnderlineClick(e) {
+    this._execOnChangeWhenBtnClick(RichUtils.toggleInlineStyle(this.state.editorState, 'UNDERLINE'), e);
   }
-  _onStrikethroughClick() {
-    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH'));
+  _onStrikethroughClick(e) {
+    this._execOnChangeWhenBtnClick(RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH'), e);
   }
-  _onHeaderTwoClick() {
-    this.onChange(RichUtils.toggleBlockType(this.state.editorState, 'header-two'));
+  _onHeaderTwoClick(e) {
+    this._execOnChangeWhenBtnClick(RichUtils.toggleBlockType(this.state.editorState, 'header-two'), e);
   }
-  _onHeaderThreeClick() {
-    this.onChange(RichUtils.toggleBlockType(this.state.editorState, 'header-three'));
+  _onHeaderThreeClick(e) {
+    this._execOnChangeWhenBtnClick(RichUtils.toggleBlockType(this.state.editorState, 'header-three'), e);
   }
-  _onListClick() {
-    this.onChange(RichUtils.toggleBlockType(this.state.editorState, 'unordered-list-item'));
+  _onListClick(e) {
+    this._execOnChangeWhenBtnClick(RichUtils.toggleBlockType(this.state.editorState, 'unordered-list-item'), e);
   }
-  _onBlockquoteClick() {
-    this.onChange(RichUtils.toggleBlockType(this.state.editorState, 'blockquote'));
+  _onBlockquoteClick(e) {
+    this._execOnChangeWhenBtnClick(RichUtils.toggleBlockType(this.state.editorState, 'blockquote'), e);
+  }
+
+  _execOnChangeWhenBtnClick(editorState, e) {
+    this.onChange(editorState);
+    e.preventDefault();
   }
 
   render() {
     return (
       <div className="root">
-        <button type='button' onClick={this._onBoldClick.bind(this)}>Bold</button>
-        <button type='button' onClick={this._onItalicClick.bind(this)}>Italic</button>
-        <button type='button' onClick={this._onUnderlineClick.bind(this)}>Underline</button>
-        <button type='button' onClick={this._onStrikethroughClick.bind(this)}>Delete</button>
-        <button type='button' onClick={this._onHeaderTwoClick.bind(this)}>H2</button>
-        <button type='button' onClick={this._onHeaderThreeClick.bind(this)}>H3</button>
-        <button type='button' onClick={this._onListClick.bind(this)}>List</button>
-        <button type='button' onClick={this._onBlockquoteClick.bind(this)}>Blockquote</button>
+        <button type='button' onMouseDown={(e) => {this._onBoldClick(e)}}>Bold</button>
+        <button type='button' onMouseDown={(e) => {this._onItalicClick(e)}}>Italic</button>
+        <button type='button' onMouseDown={(e) => {this._onUnderlineClick(e)}}>Underline</button>
+        <button type='button' onMouseDown={(e) => {this._onStrikethroughClick(e)}}>Delete</button>
+        <button type='button' onMouseDown={(e) => {this._onHeaderTwoClick(e)}}>H2</button>
+        <button type='button' onMouseDown={(e) => {this._onHeaderThreeClick(e)}}>H3</button>
+        <button type='button' onMouseDown={(e) => {this._onListClick(e)}}>List</button>
+        <button type='button' onMouseDown={(e) => {this._onBlockquoteClick(e)}}>Blockquote</button>
         <ImageAdd
           editorState={this.state.editorState}
           onChange={this.onChange}
