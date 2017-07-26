@@ -54,7 +54,7 @@ class MyEditor extends Component {
     }
     return false;
   }
-  handleChange(editorState) {
+  _handleChange(editorState) {
     let raw = convertToRaw(editorState.getCurrentContent());
     let json = JSON.stringify(raw);
     document.getElementById('post_body').value = json;
@@ -106,7 +106,7 @@ class MyEditor extends Component {
           <Editor
             editorState={this.state.editorState}
             handleKeyCommand={this.handleKeyCommand}
-            onChange={this.handleChange.bind(this)}
+            onChange={this._handleChange.bind(this)}
             plugins={plugins}
             decorators={decorators}
             placeholder="Tell your story"
