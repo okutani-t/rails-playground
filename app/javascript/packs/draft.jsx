@@ -32,6 +32,7 @@ class MyEditor extends Component {
     let initial = EditorState.createWithContent(state, new CompositeDecorator(decorators))
 
     this.state = {editorState: initial};
+    this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => this.setState({editorState});
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
   }
@@ -91,13 +92,15 @@ class MyEditor extends Component {
           onChange={this.onChange}
           modifier={imagePlugin.addImage}
         />
-        <div className="editor">
+        <div className="editor" onClick={this.focus}>
           <Editor
             editorState={this.state.editorState}
             handleKeyCommand={this.handleKeyCommand}
             onChange={this.handleChange.bind(this)}
             plugins={plugins}
             decorators={decorators}
+            placeholder="Enter some text..."
+            ref="editor"
           />
         </div>
       </div>
