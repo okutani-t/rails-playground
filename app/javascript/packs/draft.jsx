@@ -3,12 +3,21 @@ import ReactDOM from 'react-dom';
 import Editor from 'draft-js-plugins-editor';
 import createImagePlugin from 'draft-js-image-plugin';
 import ImageAdd from './ImageAdd';
-import {CompositeDecorator, ContentBlock, ContentState, EditorState, convertFromHTML, convertFromRaw, convertToRaw, RichUtils} from 'draft-js';
+import {
+  CompositeDecorator,
+  ContentBlock,
+  ContentState,
+  EditorState,
+  convertFromHTML,
+  convertFromRaw,
+  convertToRaw,
+  RichUtils,
+  getDefaultKeyBinding,
+  KeyBindingUtil
+} from 'draft-js';
 
 const imagePlugin = createImagePlugin();
-const plugins = [
-  imagePlugin,
-];
+const plugins = [imagePlugin];
 
 class MyEditor extends Component {
   constructor(props) {
@@ -34,15 +43,16 @@ class MyEditor extends Component {
     this.state = {editorState: initial};
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => this.setState({editorState});
-    this.handleKeyCommand = this.handleKeyCommand.bind(this);
+    this.handleKeyCommand = (command) => this._handleKeyCommand(command);
   }
-  handleKeyCommand(command) {
-    const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
+  _handleKeyCommand(command) {
+    const {editorState} = this.state;
+    const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
       this.onChange(newState);
-      return 'handled';
+      return true;
     }
-    return 'not-handled'
+    return false;
   }
   handleChange(editorState) {
     let raw = convertToRaw(editorState.getCurrentContent());
@@ -99,7 +109,7 @@ class MyEditor extends Component {
             onChange={this.handleChange.bind(this)}
             plugins={plugins}
             decorators={decorators}
-            placeholder="Enter some text..."
+            placeholder="Tell your story"
             ref="editor"
           />
         </div>
