@@ -2,11 +2,10 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import Editor from 'draft-js-plugins-editor';
 import createImagePlugin from 'draft-js-image-plugin';
+import ImageAdd from './ImageAdd';
 import {CompositeDecorator, ContentBlock, ContentState, EditorState, convertFromHTML, convertFromRaw, convertToRaw, RichUtils} from 'draft-js';
-import {stateToHTML} from 'draft-js-export-html';
 
 const imagePlugin = createImagePlugin();
-
 const plugins = [
   imagePlugin,
 ];
@@ -78,7 +77,7 @@ class MyEditor extends Component {
 
   render() {
     return (
-      <div style={styles.root} className='editor'>
+      <div className="root">
         <button type='button' onClick={this._onBoldClick.bind(this)}>Bold</button>
         <button type='button' onClick={this._onItalicClick.bind(this)}>Italic</button>
         <button type='button' onClick={this._onUnderlineClick.bind(this)}>Underline</button>
@@ -87,7 +86,12 @@ class MyEditor extends Component {
         <button type='button' onClick={this._onHeaderThreeClick.bind(this)}>H3</button>
         <button type='button' onClick={this._onListClick.bind(this)}>List</button>
         <button type='button' onClick={this._onBlockquoteClick.bind(this)}>Blockquote</button>
-        <div style={styles.editor}>
+        <ImageAdd
+          editorState={this.state.editorState}
+          onChange={this.onChange}
+          modifier={imagePlugin.addImage}
+        />
+        <div className="editor">
           <Editor
             editorState={this.state.editorState}
             handleKeyCommand={this.handleKeyCommand}
@@ -150,20 +154,6 @@ const decorators = [
   { strategy: findImageEntities, component: Image },
   { strategy: findLinkEntities, component: Link },
 ];
-
-const styles = {
-  root: {
-    fontFamily: '\'Helvetica\', sans-serif',
-    padding: 20,
-    width: 600,
-  },
-  editor: {
-    border: '1px solid #ccc',
-    cursor: 'text',
-    minHeight: 80,
-    padding: 10,
-  },
-};
 
 ReactDOM.render(
   <MyEditor />,
