@@ -78,6 +78,8 @@
   box-shadow: inset 0px 1px 8px -3px #ABABAB;
   background: #fefefe;
   min-height: 80px;
+  max-height: 600px;
+  overflow: scroll;
   img {
     max-width: 100%;
     box-shadow: 0 0 3px #ccc;
