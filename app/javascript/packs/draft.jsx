@@ -142,6 +142,7 @@ class MyEditor extends Component {
     }
     return false;
   }
+
   _handleChange(editorState) {
     let raw = convertToRaw(editorState.getCurrentContent());
     let json = JSON.stringify(raw);
@@ -149,27 +150,35 @@ class MyEditor extends Component {
 
     this.setState({editorState});
   }
+
   _onBoldClick(e) {
     this._execOnChangeWhenBtnClick(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'), e);
   }
+
   _onItalicClick(e) {
     this._execOnChangeWhenBtnClick(RichUtils.toggleInlineStyle(this.state.editorState, 'ITALIC'), e);
   }
+
   _onUnderlineClick(e) {
     this._execOnChangeWhenBtnClick(RichUtils.toggleInlineStyle(this.state.editorState, 'UNDERLINE'), e);
   }
+
   _onStrikethroughClick(e) {
     this._execOnChangeWhenBtnClick(RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH'), e);
   }
+
   _onHeaderTwoClick(e) {
     this._execOnChangeWhenBtnClick(RichUtils.toggleBlockType(this.state.editorState, 'header-two'), e);
   }
+
   _onHeaderThreeClick(e) {
     this._execOnChangeWhenBtnClick(RichUtils.toggleBlockType(this.state.editorState, 'header-three'), e);
   }
+
   _onListClick(e) {
     this._execOnChangeWhenBtnClick(RichUtils.toggleBlockType(this.state.editorState, 'unordered-list-item'), e);
   }
+
   _onBlockquoteClick(e) {
     this._execOnChangeWhenBtnClick(RichUtils.toggleBlockType(this.state.editorState, 'blockquote'), e);
   }
