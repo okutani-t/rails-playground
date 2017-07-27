@@ -40,11 +40,89 @@ class MyEditor extends Component {
     }
     let initial = EditorState.createWithContent(state, new CompositeDecorator(decorators))
 
-    this.state = {editorState: initial};
+    this.state = {
+      editorState: initial,
+      showURLInput: false,
+      urlValue: ''
+    };
+
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => this.setState({editorState});
     this.handleKeyCommand = (command) => this._handleKeyCommand(command);
+    this.promptForLink = this._promptForLink.bind(this);
+    this.onURLChange = (e) => this.setState({urlValue: e.target.value});
+    this.confirmLink = this._confirmLink.bind(this);
+    this.onLinkInputKeyDown = this._onLinkInputKeyDown.bind(this);
+    this.removeLink = this._removeLink.bind(this);
   }
+
+  _promptForLink(e) {
+    e.preventDefault();
+    const {editorState} = this.state;
+    const selection = editorState.getSelection();
+    if (!selection.isCollapsed()) {
+      const contentState = editorState.getCurrentContent();
+      const startKey = editorState.getSelection().getStartKey();
+      const startOffset = editorState.getSelection().getStartOffset();
+      const blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
+      const linkKey = blockWithLinkAtBeginning.getEntityAt(startOffset);
+
+      let url = '';
+      if (linkKey) {
+        const linkInstance = contentState.getEntity(linkKey);
+        url = linkInstance.getData().url;
+      }
+
+      this.setState({
+        showURLInput: true,
+        urlValue: url,
+      }, () => {
+        setTimeout(() => this.refs.url.focus(), 0);
+      });
+    }
+  }
+
+  _confirmLink(e) {
+    e.preventDefault();
+    const {editorState, urlValue} = this.state;
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      'LINK',
+      'MUTABLE',
+      {url: urlValue}
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+    this.setState({
+      editorState: RichUtils.toggleLink(
+        newEditorState,
+        newEditorState.getSelection(),
+        entityKey
+      ),
+      showUrlInput: false,
+      urlValue: '',
+    }, () => {
+      setTimeout(() => this.refs.editor.focus(), 0);
+    });
+  }
+
+  _onLinkInputKeyDown(e) {
+    if (e.which === 13) {
+      this._confirmLink(e);
+    }
+  }
+
+  _removeLink(e) {
+    e.preventDefault();
+    const {editorState} = this.state;
+    const selection = editorState.getSelection();
+    if (!selection.isCollapsed()) {
+      this.setState({
+        editorState: RichUtils.toggleLink(editorState, selection, null),
+      });
+    }
+  }
+
   _handleKeyCommand(command) {
     const {editorState} = this.state;
     const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -92,21 +170,43 @@ class MyEditor extends Component {
   }
 
   render() {
+    let urlInput;
+    if (this.state.showURLInput) {
+      urlInput =
+        <div>
+          <input
+            onChange={this.onURLChange}
+            ref="url"
+            type="text"
+            value={this.state.urlValue}
+            onKeyDown={this.onLinkInputKeyDown}
+          />
+          <button type='button' onMouseDown={this.confirmLink}>
+            Confirm
+          </button>
+        </div>
+    }
+
     return (
       <div className="root">
-        <button type='button' onMouseDown={(e) => {this._onBoldClick(e)}}>Bold</button>
-        <button type='button' onMouseDown={(e) => {this._onItalicClick(e)}}>Italic</button>
-        <button type='button' onMouseDown={(e) => {this._onUnderlineClick(e)}}>Underline</button>
-        <button type='button' onMouseDown={(e) => {this._onStrikethroughClick(e)}}>Delete</button>
-        <button type='button' onMouseDown={(e) => {this._onHeaderTwoClick(e)}}>H2</button>
-        <button type='button' onMouseDown={(e) => {this._onHeaderThreeClick(e)}}>H3</button>
-        <button type='button' onMouseDown={(e) => {this._onListClick(e)}}>List</button>
-        <button type='button' onMouseDown={(e) => {this._onBlockquoteClick(e)}}>Blockquote</button>
-        <ImageAdd
-          editorState={this.state.editorState}
-          onChange={this.onChange}
-          modifier={imagePlugin.addImage}
-        />
+        <div className="bottons">
+          <button type='button' onMouseDown={(e) => {this._onBoldClick(e)}}>Bold</button>
+          <button type='button' onMouseDown={(e) => {this._onItalicClick(e)}}>Italic</button>
+          <button type='button' onMouseDown={(e) => {this._onUnderlineClick(e)}}>Underline</button>
+          <button type='button' onMouseDown={(e) => {this._onStrikethroughClick(e)}}>Delete</button>
+          <button type='button' onMouseDown={(e) => {this._onHeaderTwoClick(e)}}>H2</button>
+          <button type='button' onMouseDown={(e) => {this._onHeaderThreeClick(e)}}>H3</button>
+          <button type='button' onMouseDown={(e) => {this._onListClick(e)}}>List</button>
+          <button type='button' onMouseDown={(e) => {this._onBlockquoteClick(e)}}>Blockquote</button>
+          <button type='button' onMouseDown={this.promptForLink}>Add Link</button>
+          <button type='button' onMouseDown={this.removeLink}>Remove Link</button>
+          <ImageAdd
+            editorState={this.state.editorState}
+            onChange={this.onChange}
+            modifier={imagePlugin.addImage}
+          />
+        </div>
+        {urlInput}
         <div className="editor" onClick={this.focus}>
           <Editor
             editorState={this.state.editorState}
@@ -139,7 +239,7 @@ function findLinkEntities(contentBlock, callback, contentState) {
 const Link = (props) => {
   const {url} = props.contentState.getEntity(props.entityKey).getData();
   return (
-    <a href={url}>{props.children}</a>
+    <a href={url} style={styles.link}>{props.children}</a>
   );
 };
 
@@ -166,6 +266,13 @@ const Image = (props) => {
   return (
     <img src={src} height={height} width={width} />
   );
+};
+
+const styles = {
+  link: {
+    color: '#3b5998',
+    textDecoration: 'underline',
+  }
 };
 
 const decorators = [
