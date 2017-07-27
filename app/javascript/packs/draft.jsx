@@ -49,11 +49,21 @@ class MyEditor extends Component {
     this.focus = () => this.refs.editor.focus();
     this.onChange = (editorState) => this.setState({editorState});
     this.handleKeyCommand = (command) => this._handleKeyCommand(command);
+
+    this.onBoldClick = this._onBoldClick.bind(this);
+    this.onItalicClick = this._onItalicClick.bind(this);
+    this.onUnderlineClick = this._onUnderlineClick.bind(this);
+    this.onStrikethroughClick = this._onStrikethroughClick.bind(this);
+    this.onHeaderTwoClick = this._onHeaderTwoClick.bind(this);
+    this.onHeaderThreeClick = this._onHeaderThreeClick.bind(this);
+    this.onListClick = this._onListClick.bind(this);
+    this.onBlockquoteClick = this._onBlockquoteClick.bind(this);
+
     this.promptForLink = this._promptForLink.bind(this);
-    this.onURLChange = (e) => this.setState({urlValue: e.target.value});
-    this.confirmLink = this._confirmLink.bind(this);
-    this.onLinkInputKeyDown = this._onLinkInputKeyDown.bind(this);
     this.removeLink = this._removeLink.bind(this);
+    this.onLinkInputKeyDown = this._onLinkInputKeyDown.bind(this);
+    this.confirmLink = this._confirmLink.bind(this);
+    this.onURLChange = (e) => this.setState({urlValue: e.target.value});
   }
 
   _promptForLink(e) {
@@ -190,14 +200,14 @@ class MyEditor extends Component {
     return (
       <div className="root">
         <div className="bottons">
-          <button type='button' onMouseDown={(e) => {this._onBoldClick(e)}}>Bold</button>
-          <button type='button' onMouseDown={(e) => {this._onItalicClick(e)}}>Italic</button>
-          <button type='button' onMouseDown={(e) => {this._onUnderlineClick(e)}}>Underline</button>
-          <button type='button' onMouseDown={(e) => {this._onStrikethroughClick(e)}}>Delete</button>
-          <button type='button' onMouseDown={(e) => {this._onHeaderTwoClick(e)}}>H2</button>
-          <button type='button' onMouseDown={(e) => {this._onHeaderThreeClick(e)}}>H3</button>
-          <button type='button' onMouseDown={(e) => {this._onListClick(e)}}>List</button>
-          <button type='button' onMouseDown={(e) => {this._onBlockquoteClick(e)}}>Blockquote</button>
+          <button type='button' onMouseDown={this.onBoldClick}>Bold</button>
+          <button type='button' onMouseDown={this.onItalicClick}>Italic</button>
+          <button type='button' onMouseDown={this.onUnderlineClick}>Underline</button>
+          <button type='button' onMouseDown={this.onStrikethroughClick}>Delete</button>
+          <button type='button' onMouseDown={this.onHeaderTwoClick}>H2</button>
+          <button type='button' onMouseDown={this.onHeaderThreeClick}>H3</button>
+          <button type='button' onMouseDown={this.onListClick}>List</button>
+          <button type='button' onMouseDown={this.onBlockquoteClick}>Blockquote</button>
           <button type='button' onMouseDown={this.promptForLink}>Add Link</button>
           <button type='button' onMouseDown={this.removeLink}>Remove Link</button>
           <ImageAdd
