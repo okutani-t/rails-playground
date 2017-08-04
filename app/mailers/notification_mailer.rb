@@ -1,13 +1,8 @@
 class NotificationMailer < ApplicationMailer
+  def send_message(name)
+    @name = name
+    @greeting = 'Hi'
 
-  # Subject can be set in your I18n file at config/locales/en.yml
-  # with the following lookup:
-  #
-  #   en.notification_mailer.send_message.subject
-  #
-  def send_message
-    @greeting = "Hi"
-
-    mail to: "to@example.org"
+    mail to: 'to_okutani@example.com', subject: 'ActionMailerのテスト送信'
   end
 end
