@@ -1,0 +1,19 @@
+<h1>無限スクロール</h1>
+
+<table id="posts">
+  <thead>
+  <tr>
+    <th>タイトル</th>
+  </tr>
+  </thead>
+
+  <tbody class="page">
+    <%= render 'posts' %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Post', new_post_path %>
+
+<%= paginate @posts %>
