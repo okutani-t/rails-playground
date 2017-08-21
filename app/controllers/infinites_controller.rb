@@ -1,0 +1,2 @@
+class InfinitesController < ApplicationController
+end
