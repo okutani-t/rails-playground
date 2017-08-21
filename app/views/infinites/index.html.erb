@@ -1,0 +1,15 @@
+<h1>無限スクロール</h1>
+
+<table id="posts">
+  <thead>
+  <tr>
+    <th>タイトル</th>
+  </tr>
+  </thead>
+
+  <tbody class="page">
+  <%= render partial: 'infinites/post', collection: @posts %>
+  </tbody>
+</table>
+
+<%= paginate @posts %>
