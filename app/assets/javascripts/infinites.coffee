@@ -1,9 +1,7 @@
 $ ->
-  $("#posts .page").infinitescroll
-    loading: {
-      img:     "http://www.mytreedb.com/uploads/mytreedb/loader/ajax_loader_blue_48.gif"
-      msgText: "ロード中..."
-    }
-    navSelector: "nav.pagination"
-    nextSelector: "nav.pagination a[rel=next]"
-    itemSelector: "#posts tr.post"
+  $("#posts .page").infiniteScroll
+    hideNav: "nav.pagination"
+    path: "nav.pagination a[rel=next]"
+    append: "#posts tr.post"
+    status: '.page-load-status'
+    history: false

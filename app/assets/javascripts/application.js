@@ -13,5 +13,5 @@
 //= require rails-ujs
 //= require turbolinks
 //= require jquery
-//= require jquery.infinitescroll
+//= require infinite-scroll/dist/infinite-scroll.pkgd
 //= require_tree .
